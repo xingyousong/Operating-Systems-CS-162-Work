@@ -1,0 +1,12 @@
+• What file format is used for this binary? And what architecture is it compiled for?
+-It's compiled for i386:x86-84 architectures, and it's mostly assembly code with a few auxiliary data.  
+
+
+• What are some of the names of segment/sections you find?
+-25 .comment, 10 .init,  23 .data; Underlying each section has names like <_start>, <fopen@plt>, etc. 
+
+• What segment/section contains main (the function) and what is the address of main? (It should be the same as what you saw in gdb)
+- Disassembly of section .text: 0000000000400719 <main> 
+
+• Do you see the stack segment anywhere? What about the heap? Explain
+- No, because the goal of the object file is to link libraries together; at execution-time the OS kernel manages the memory spaces (and hence stack and heap)

@@ -1,0 +1,50 @@
+• Use objdump with the -D flag on the map executable. Which of the addresses from the output of running ./map are defined in the executable, and which segment/section is each defined in?
+---
+Here's the output of ./map: 
+
+_main  @ 0x4005c2
+recur @ 0x40057d
+_main stack: 0x7ffe6549ef9c
+static data: 0x601048
+Heap: malloc 1: 0xa13010
+Heap: malloc 2: 0xa13080
+recur call 3: stack@ 0x7ffe6549ef6c
+recur call 2: stack@ 0x7ffe6549ef3c
+recur call 1: stack@ 0x7ffe6549ef0c
+recur call 0: stack@ 0x7ffe6549eedc
+
+
+From this, we see that
+ _main  @ 0x4005c2 (found in 00000000004005c2 <main>: 4005c2:	55  push   %rbp)
+  recur @ 0x40057d (found in 000000000040057d <recur>: 40057d:	55 push   %rbp)
+  static data: 0x601048  (0000000000601048 <stuff>: 601048:	07    (bad)  )
+
+Heap and recur are of course, outside of object file because they're defined at runtime. 
+
+• Make a list of the important segments, and what they are used for (look up their names on the
+Internet if you don’t know).
+
+.main     contains the main function.
+.data     stores initialized variables.
+.bss      stores uninitialized variables.
+.text     stores the instructions of the program.
+
+
+
+
+• What direction is the stack growing in?
+---
+It's moving downwards from high addresses to lower addresses, as seen from recur calls. 
+
+• How large is the stack frame for each recursive call?
+---
+Subtracting consecutive rec calls gives hexadecimal 0x30 = 48 bytes. 
+
+• Where is the heap? What direction is it growing in?
+---
+It's growing upwards (as seen form heap malloc 1 to 2)
+
+• Are the two malloc()ed memory areas contiguous? (e.g. is there any extra space between their
+addresses?)
+---
+It's not contiguous. We malloced 100 bytes for each step, but the difference between heap malloc 1 and 2's addresses is 0x70, which is bigger than the 0x64 = 100. 

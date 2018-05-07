@@ -1,0 +1,76 @@
+• What is the value of argv? (hint: print argv)
+--- 
+(gdb) print argv
+$1 = (char **) 0x7fffffffe648
+
+
+• What is pointed to by argv? (hint: print argv[0])
+--
+(gdb) print argv[0]
+$2 = 0x7fffffffe867
+
+
+• What is the address of the function main?
+--
+(gdb) print &main
+$4 = (int (*)(int, char **)) 0x400719
+
+
+
+• Try info stack. Explain what you see.
+--
+(gdb) info stack
+#0  count (file_name=0x7fffffffe88c "wc.c") at wc.c:37
+#1  0x000000000040073b in main (argc=2, argv=0x7fffffffe648) at wc.c:68
+
+^ This is the stack for the functions, with currently executing functio as count, and then main.
+
+
+
+• Try info frame. Explain what you see.
+--
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffe540:
+ rip = 0x40069a in count (wc.c:37); saved rip = 0x40073b
+ called by frame at 0x7fffffffe570
+ source language c.
+ Arglist at 0x7fffffffe530, args: file_name=0x7fffffffe88c "wc.c"
+ Locals at 0x7fffffffe530, Previous frame's sp is 0x7fffffffe540
+ Saved registers:
+  rbp at 0x7fffffffe530, rip at 0x7fffffffe538
+
+
+
+^ This means that 0 is currently the executing frame, with the address at 0x7fffffffe540.
+saved rip is the return address after execution of the function "count", while rip is the current instruction being executed. Also, arglist contains the address of arguments, locals the address of local variables, sp is the stack pointer to the previous frame.
+
+• Try info registers. Which registers are holding aspects of the program that you recognize?
+---
+(gdb) info registers
+rax            0x3	3
+rbx            0x0	0
+rcx            0xfbad0088	4222419080
+rdx            0x63	99
+rsi            0x6020f0	6299888
+rdi            0x602010	6299664
+rbp            0x7fffffffe530	0x7fffffffe530
+rsp            0x7fffffffe4e0	0x7fffffffe4e0
+r8             0x7ffff7fed740	140737354061632
+r9             0x7ffff7fed740	140737354061632
+r10            0x22	34
+r11            0x246	582
+r12            0x400520	4195616
+r13            0x7fffffffe640	140737488348736
+r14            0x0	0
+r15            0x0	0
+rip            0x40069a	0x40069a <count+141>
+eflags         0x206	[ PF IF ]
+cs             0x33	51
+ss             0x2b	43
+ds             0x0	0
+es             0x0	0
+fs             0x0	0
+gs             0x0	0
+
+
+^ rbp and rip are the saved registers, and rip is the current instruction being executed. 
